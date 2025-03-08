@@ -8,7 +8,10 @@ export const payloadGenerator = ({ ...rest }: IPAYLOAD): IPAYLOAD => {
 
 export function setTokensAndCookies(user: User, res: Response, setAccessToken = true) {
   const payLoad = payloadGenerator({
-    ...user
+    id: user.id,
+    isBlocked: user.isBlocked,
+    username: user.username,
+    role: user.role
   });
   let accessToken: string | undefined = undefined;
   if (setAccessToken) {

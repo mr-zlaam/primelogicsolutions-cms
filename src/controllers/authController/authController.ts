@@ -11,15 +11,15 @@ import variables from "../../constants/variables.js";
 export default {
   login: asyncHandler(async (req, res) => {
     const userBody = req.body as User;
-    if (!userBody.username || !userBody.password) throwError(reshttp.badRequestCode, reshttp.badGatewayMessage);
+    if (!userBody.username || !userBody.password) throwError(reshttp.badRequestCode, "username and password is required");
     const user = await db.user.findUnique({ where: { username: userBody.username } });
     if (user) {
       const isPasswordCorrect = await verifyPassword(userBody.password, user.password, res);
-      if (!isPasswordCorrect) throwError(reshttp.badRequestCode, reshttp.badRequestMessage);
+      if (!isPasswordCorrect) throwError(reshttp.badRequestCode, "invalid credentials");
       const { accessToken } = setTokensAndCookies(user, res);
       httpResponse(req, res, reshttp.okCode, `${user.username} logged in successfully`, { accessToken });
     }
-    throwError(reshttp.badRequestCode, "Please createn an account first");
+    throwError(reshttp.badRequestCode, "Please create an account first");
   }),
   createMod: asyncHandler(async (req, res) => {
     const userBody = req.body as User;
