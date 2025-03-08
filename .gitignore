@@ -5,3 +5,4 @@ pnpm-error.log
 dist/
 logs/*
 logs
+db/
