@@ -60,3 +60,24 @@ enum SectionType {
   LINK
   HEADING
 }
+
+model User {
+  id        String   @unique @default(cuid())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  isBlocked Boolean  @default(false)
+  role      UserRole
+  createdAt DateTime @default(now())
+}
+
+enum UserRole {
+  ADMIN
+  MOD
+}
+
+model isAdminCreated {
+  id             Int      @id @default(autoincrement())
+  status         Boolean  @default(false)
+  isAdminCreated DateTime @default(now())
+}
