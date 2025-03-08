@@ -25,30 +25,29 @@ model MenuItem {
   parent   MenuItem?  @relation("MenuItemToMenuItem", fields: [parentId], references: [id], onDelete: Cascade)
   children MenuItem[] @relation("MenuItemToMenuItem")
 
-  // Page data can be string or related to sections
-  stringPageData String?
-  sections       Section[]
+  // Exactly matching your type - name pageData instead of sections
+  pageData PageData[] @relation("MenuItemToPageData")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Section {
+model PageData {
   id          Int         @id @default(autoincrement())
   title       String
-  subTitle    String?
-  description String?
-  image       String?
   sectionType SectionType
+  subTitle    String?
+  description String
+  image       String?
 
-  // Nested sections
+  // Parent-child relationship for nested sections
   parentSectionId Int?
-  parentSection   Section?  @relation("SectionToSection", fields: [parentSectionId], references: [id], onDelete: Cascade)
-  childSections   Section[] @relation("SectionToSection")
+  parentSection   PageData?  @relation("SectionToSection", fields: [parentSectionId], references: [id], onDelete: Cascade)
+  sectionChildren PageData[] @relation("SectionToSection")
 
-  // Link to menu item
+  // Link to menu item - renamed relation to match your structure
   menuItemId Int?
-  menuItem   MenuItem? @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+  menuItem   MenuItem? @relation("MenuItemToPageData", fields: [menuItemId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
