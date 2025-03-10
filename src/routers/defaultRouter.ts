@@ -6,5 +6,5 @@ import { authRouter } from "./authtRouter/authRouter.js";
 export const defaultRouter: Router = Router();
 
 defaultRouter.use("/", performanceRouter);
-defaultRouter.use("/pageData", cmsRouter);
+defaultRouter.use("/cms", cmsRouter);
 defaultRouter.use("/auth", authRouter);

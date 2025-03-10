@@ -4,6 +4,7 @@ import { db } from "../../../databases/database.js";
 import reshttp from "reshttp";
 import logger from "../../../utils/loggerUtils.js";
 import { httpResponse } from "../../../utils/apiResponseUtils.js";
+import { generateSlug } from "../../../utils/slugStringGeneratorUtils.js";
 
 export default {
   createMenuItem: asyncHandler(async (req, res) => {
@@ -11,11 +12,12 @@ export default {
     // ** Check If menuItem is already exixsts
     // ** TODO:VALIDATION YET TO BE HANDLEd
     const menuItem = await db.menuItem.findFirst({ where: { title: menuBody.title, href: menuBody.href } });
-    if (!menuItem) {
+    if (menuItem) {
       logger.info("Menu Item is already exists with same values");
       throw { status: reshttp.conflictCode, message: reshttp.conflictMessage };
     }
-    const createdMenuItems = await db.menuItem.create({ data: { ...menuBody } });
+    const href = generateSlug(menuBody.title);
+    const createdMenuItems = await db.menuItem.create({ data: { ...menuBody, href } });
     httpResponse(req, res, reshttp.createdCode, reshttp.createdMessage, { ...createdMenuItems, message: "Menu items created successfully" });
   })
 };
