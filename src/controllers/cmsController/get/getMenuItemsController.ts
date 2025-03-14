@@ -7,7 +7,7 @@ import { httpResponse } from "../../../utils/apiResponseUtils.js";
 
 export default {
   // Get a single menu item with nested children
-  getMenuItem: asyncHandler(async (req, res) => {
+  getSingleMenuItem: asyncHandler(async (req, res) => {
     const { id } = req.params;
     const depth = req.query.depth ? parseInt(req.query.depth as string) : 3;
 
