@@ -31,7 +31,7 @@ cmsRouter
     createDataController.createPageData
   );
 
-cmsRouter.route("/getSingleMenuItem/:id").get(validateDataMiddleware(CreateMenuItemSchema), getMenuItemsController.getSingleMenuItem);
+cmsRouter.route("/getSingleMenuItem/:id").get(getMenuItemsController.getSingleMenuItem);
 
 cmsRouter.route("/getAllMenuItems").get(getMenuItemsController.getAllMenuItems);
 
@@ -39,7 +39,7 @@ cmsRouter.route("/getPageData/:id").get(getMenuItemsController.getPageData);
 
 cmsRouter
   .route("/updateMenuItem/:id")
-  .get(
+  .patch(
     validateDataMiddleware(UpdateMenuItemSchema),
     authMiddleware.checkToken,
     authMiddleware.checkIfUserIsModorAdmin,
@@ -48,7 +48,7 @@ cmsRouter
 
 cmsRouter
   .route("/updatePageData/:id")
-  .get(
+  .patch(
     validateDataMiddleware(UpdatePageDataSchema),
     authMiddleware.checkToken,
     authMiddleware.checkIfUserIsModorAdmin,

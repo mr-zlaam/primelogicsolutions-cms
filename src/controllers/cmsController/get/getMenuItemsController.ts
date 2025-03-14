@@ -11,7 +11,6 @@ export default {
     const { id } = req.params;
     const depth = req.query.depth ? parseInt(req.query.depth as string) : 3;
 
-    // Validate ID
     if (!id || isNaN(Number(id))) {
       throwError(reshttp.badRequestCode, "Valid menu item ID is required");
     }
@@ -35,7 +34,6 @@ export default {
   getAllMenuItems: asyncHandler(async (req, res) => {
     const depth = req.query.depth ? parseInt(req.query.depth as string) : 3;
 
-    // Fetch only top-level menu items (those without a parent)
     const menuItems = await db.menuItem.findMany({
       where: { parentId: null },
       include: getIncludeOptions(depth),

@@ -4,6 +4,7 @@ import type { UpdateMenuItemRequest, UpdatePageDataRequest } from "../../../util
 import { throwError } from "../../../utils/throwErrorUtils.js";
 import { db } from "../../../databases/database.js";
 import { httpResponse } from "../../../utils/apiResponseUtils.js";
+import { generateSlug } from "../../../utils/slugStringGeneratorUtils.js";
 
 export default {
   updateMenuItem: asyncHandler(async (req, res) => {
@@ -25,6 +26,12 @@ export default {
     if (!existingMenuItem) {
       throwError(reshttp.notFoundCode, `Menu item with ID ${id} not found`);
     }
+    const checkIfMenuItemExists = await db.menuItem.findFirst({
+      where: { OR: [{ title: menuItemData.title }, { href: menuItemData.href }] }
+    });
+    if (checkIfMenuItemExists) {
+      throwError(reshttp.badRequestCode, "Menu item already exists");
+    }
 
     // If changing parent, validate new parent exists
     if (menuItemData.parentId) {
@@ -45,7 +52,7 @@ export default {
     // Update the menu item
     const updatedMenuItem = await db.menuItem.update({
       where: { id: menuItemId },
-      data: menuItemData,
+      data: { ...menuItemData, href: `/${generateSlug(menuItemData.title as string)}` },
       include: {
         children: true,
         pageData: true

@@ -15,10 +15,10 @@ model RateLimiterFlexible {
 
 model MenuItem {
   id          Int        @id @default(autoincrement())
-  title       String
+  title       String     @unique
   subTitle    String?
   description String?
-  href        String
+  href        String     @unique
   image       String?
   // Parent-child relationship
   parentId    Int?
@@ -28,11 +28,16 @@ model MenuItem {
   pageData    PageData[] @relation("MenuItemToPageData")
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+
+  @@index([id])
+  @@index([title])
+  @@index([href])
+  @@index([parentId])
 }
 
 model PageData {
   id              Int         @id @default(autoincrement())
-  title           String
+  title           String      @unique
   subTitle        String?
   sectionType     SectionType
   description     String
@@ -58,6 +63,12 @@ model PageData {
   menuItem        MenuItem?   @relation("MenuItemToPageData", fields: [menuItemId], references: [id], onDelete: Cascade)
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
+
+  @@index([id])
+  @@index([title])
+  @@index([menuItemId])
+  @@index([parentSectionId])
+  @@index([sectionType])
 }
 
 enum SectionType {

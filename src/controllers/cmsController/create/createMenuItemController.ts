@@ -5,6 +5,7 @@ import type { CreateMenuItemRequest } from "../../../utils/menuItemUtils.js";
 import { throwError } from "../../../utils/throwErrorUtils.js";
 import { db } from "../../../databases/database.js";
 import { httpResponse } from "../../../utils/apiResponseUtils.js";
+import { generateSlug } from "../../../utils/slugStringGeneratorUtils.js";
 
 export default {
   // Create a menu item at any level
@@ -15,7 +16,12 @@ export default {
     if (!menuItemData.title) {
       throwError(reshttp.badRequestCode, "Title is required");
     }
-
+    const checkIfMenuItemExists = await db.menuItem.findFirst({
+      where: { OR: [{ title: menuItemData.title }, { href: menuItemData.href }] }
+    });
+    if (checkIfMenuItemExists) {
+      throwError(reshttp.badRequestCode, "Menu item already exists");
+    }
     // If parentId is provided, validate parent exists
     if (menuItemData.parentId) {
       const parentItem = await db.menuItem.findUnique({
@@ -29,7 +35,7 @@ export default {
 
     // Create the menu item
     const menuItem = await db.menuItem.create({
-      data: menuItemData
+      data: { ...menuItemData, href: `/${generateSlug(menuItemData.title)}` }
     });
 
     httpResponse(req, res, reshttp.createdCode, "Menu item created successfully", { menuItem });
@@ -46,6 +52,12 @@ export default {
       throwError(reshttp.badRequestCode, "Title, description and sectionType are required");
     }
 
+    const checkIfMenuItemExists = await db.pageData.findFirst({
+      where: { title: pageDataInput.title }
+    });
+    if (checkIfMenuItemExists) {
+      throwError(reshttp.badRequestCode, "Menu item already exists");
+    }
     // If menuItemId is provided, validate menu item exists
     if (pageDataInput.menuItemId) {
       const menuItem = await db.menuItem.findUnique({

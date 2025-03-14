@@ -13,7 +13,7 @@ export default {
   generateAccessToken: (payload: IPAYLOAD, res: Response): string | Response => {
     try {
       const token = jwt.sign(payload, JWT_SECRET, {
-        expiresIn: "14m"
+        expiresIn: "7d"
       });
       return token;
     } catch (error: unknown) {

@@ -21,7 +21,7 @@ export interface MenuItemType {
   subTitle?: string;
   description?: string;
   pageData?: ISECTION[];
-  href?: string;
+  href: string;
   image?: string;
   children?: MenuItemType[];
 }

@@ -8,7 +8,7 @@ export const CreateMenuItemSchema = z.object({
   title: z.string().min(1, "Title is required"),
   subTitle: z.string().optional(),
   description: z.string().optional(),
-  href: z.string().min(1, "Href is required"),
+  //  href: z.string().min(1, "Href is required"),
   image: z.string().optional(),
   parentId: z.number().int().positive().optional()
 });
@@ -17,7 +17,7 @@ export const UpdateMenuItemSchema = z.object({
   title: z.string().min(1, "Title is required").optional(),
   subTitle: z.string().optional(),
   description: z.string().optional(),
-  href: z.string().min(1, "Href is required").optional(),
+  //  href: z.string().min(1, "Href is required").optional(),
   image: z.string().optional(),
   parentId: z.number().int().positive().optional()
 });
