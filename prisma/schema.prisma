@@ -14,51 +14,58 @@ model RateLimiterFlexible {
 }
 
 model MenuItem {
-  id          Int     @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   title       String
+  subTitle    String?
   description String?
-  href        String?
+  href        String
   image       String?
-
   // Parent-child relationship
-  parentId Int?
-  parent   MenuItem?  @relation("MenuItemToMenuItem", fields: [parentId], references: [id], onDelete: Cascade)
-  children MenuItem[] @relation("MenuItemToMenuItem")
-
-  // Exactly matching your type - name pageData instead of sections
-  pageData PageData[] @relation("MenuItemToPageData")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  parentId    Int?
+  parent      MenuItem?  @relation("MenuItemToMenuItem", fields: [parentId], references: [id], onDelete: Cascade)
+  children    MenuItem[] @relation("MenuItemToMenuItem")
+  // Relation to page data
+  pageData    PageData[] @relation("MenuItemToPageData")
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }
 
 model PageData {
-  id          Int         @id @default(autoincrement())
-  title       String
-  sectionType SectionType
-  subTitle    String?
-  description String
-  image       String?
-
+  id              Int         @id @default(autoincrement())
+  title           String
+  subTitle        String?
+  sectionType     SectionType
+  description     String
+  icon            String?
+  image1          String?
+  image2          String?
+  image3          String?
+  image4          String?
+  image5          String?
+  description0    String?
+  description1    String?
+  description2    String?
+  description3    String?
+  description4    String?
+  description5    String?
+  description6    String?
   // Parent-child relationship for nested sections
   parentSectionId Int?
-  parentSection   PageData?  @relation("SectionToSection", fields: [parentSectionId], references: [id], onDelete: Cascade)
-  sectionChildren PageData[] @relation("SectionToSection")
-
-  // Link to menu item - renamed relation to match your structure
-  menuItemId Int?
-  menuItem   MenuItem? @relation("MenuItemToPageData", fields: [menuItemId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  parentSection   PageData?   @relation("SectionToSection", fields: [parentSectionId], references: [id], onDelete: Cascade)
+  sectionChildren PageData[]  @relation("SectionToSection")
+  // Link to menu item
+  menuItemId      Int?
+  menuItem        MenuItem?   @relation("MenuItemToPageData", fields: [menuItemId], references: [id], onDelete: Cascade)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
 }
 
 enum SectionType {
-  LIST
   IMAGE
   PARAGRAPH
-  LINK
   HEADING
+  VIDEO
+  LINK
 }
 
 model User {
